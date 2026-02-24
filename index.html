@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para Mi Amor ❤️</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  background:linear-gradient(45deg,#ff4e8b,#ff9ecf);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:Arial;
+  overflow:hidden;
+  text-align:center;
+  color:white;
+}
+
+#login{
+  position:absolute;
+}
+
+input{
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  text-align:center;
+}
+
+button{
+  padding:10px 15px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+#carta{
+  display:none;
+  font-size:2rem;
+}
+
+#mensaje{
+  margin-top:20px;
+  font-size:1.5rem;
+  min-height:60px;
+}
+
+/* SLIDESHOW FIESTA */
+#slideshow{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+
+.slide{
+  position:absolute;
+  width:170px;
+  height:170px;
+  object-fit:cover;
+  border-radius:20px;
+  opacity:0;
+  transition:all 0.8s ease;
+  transform:scale(0.5) rotate(0deg);
+  box-shadow:0 0 20px rgba(255,255,255,0.8);
+}
+
+.slide.mostrar{
+  opacity:1;
+  transform:scale(1) rotate(var(--rotacion));
+  animation:flotar 3s ease-in-out infinite alternate;
+}
+
+@keyframes flotar{
+  from{transform:translateY(0) scale(1) rotate(var(--rotacion));}
+  to{transform:translateY(-20px) scale(1.05) rotate(var(--rotacion));}
+}
+
+.frase{
+  position:absolute;
+  color:white;
+  font-size:14px;
+  font-weight:bold;
+  text-shadow:0 0 10px black;
+  pointer-events:none;
+  animation:desaparecer 3s forwards;
+}
+
+@keyframes desaparecer{
+  0%{opacity:1;}
+  100%{opacity:0;}
+}
+
+.corazon{
+  position:fixed;
+  color:red;
+  animation:caer 3s linear infinite;
+}
+
+@keyframes caer{
+  0%{transform:translateY(-10vh);}
+  100%{transform:translateY(110vh);}
+}
+
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="login">
+  <h2>🔐 Nuestra fecha especial 💕</h2>
+  <input type="password" id="clave" placeholder="Escríbela aquí">
+  <br><br>
+  <button onclick="verificar()">Entrar</button>
+</div>
+
+<div id="carta">
+  💌 Feliz Cumpleaños Mi Amor 💌
+  <div id="mensaje"></div>
+
+  <div id="slideshow">
+    <img src="foto1.jpg" class="slide">
+    <img src="foto2.jpg" class="slide">
+    <img src="foto3.jpg" class="slide">
+    <img src="foto4.jpg" class="slide">
+    <img src="foto5.jpg" class="slide">
+    <img src="foto6.jpg" class="slide">
+    <img src="foto7.jpg" class="slide">
+  </div>
+</div>
+
+<audio id="music" src="cancion.mp3" loop></audio>
+<canvas id="fireworks"></canvas>
+
+<script>
+function verificar(){
+  const clave = document.getElementById("clave").value;
+
+  if(clave === "07122025"){
+    document.getElementById("login").style.display = "none";
+    document.getElementById("carta").style.display = "block";
+
+    const texto = "Eres lo mejor que me ha pasado ❤️ Te amo muchísimo y quiero estar siempre contigo 💕";
+    escribirTexto(texto);
+    iniciarSlideshow();
+    document.getElementById("music").play();
+    corazones();
+    fuegos();
+  } else {
+    alert("Ups… esa no es nuestra fecha 💔");
+  }
+}
+
+function escribirTexto(texto){
+  let i=0;
+  const mensaje=document.getElementById("mensaje");
+  mensaje.innerHTML="";
+  const intervalo=setInterval(()=>{
+    mensaje.innerHTML+=texto[i];
+    i++;
+    if(i>=texto.length) clearInterval(intervalo);
+  },50);
+}
+
+function iniciarSlideshow(){
+  const slides=document.querySelectorAll(".slide");
+
+  const frases=[
+    "Mi persona favorita 💕",
+    "Mi pequeña 💗",
+    "Mi todo ❤️",
+    "Mi felicidad ✨",
+    "Mi mundo 🌎",
+    "Mi princesa 👑",
+    "Mi amor infinito 💖",
+    "Contigo siempre 🥹"
+  ];
+
+  slides.forEach(slide=>{
+    setInterval(()=>{
+
+      let randomX=Math.random()*(window.innerWidth-200);
+      let randomY=Math.random()*(window.innerHeight-200);
+      let rotacion=(Math.random()*40-20)+"deg";
+
+      slide.style.left=randomX+"px";
+      slide.style.top=randomY+"px";
+      slide.style.setProperty("--rotacion",rotacion);
+
+      slide.classList.add("mostrar");
+
+      const frase=document.createElement("div");
+      frase.classList.add("frase");
+      frase.innerText=frases[Math.floor(Math.random()*frases.length)];
+      frase.style.left=randomX+"px";
+      frase.style.top=(randomY-25)+"px";
+
+      document.body.appendChild(frase);
+
+      setTimeout(()=>{
+        slide.classList.remove("mostrar");
+        frase.remove();
+      },3000);
+
+    },3500+Math.random()*2000);
+  });
+}
+
+function corazones(){
+  setInterval(()=>{
+    const corazon=document.createElement("div");
+    corazon.classList.add("corazon");
+    corazon.style.left=Math.random()*100+"vw";
+    corazon.innerHTML="❤️";
+    document.body.appendChild(corazon);
+    setTimeout(()=>corazon.remove(),3000);
+  },300);
+}
+
+function fuegos(){
+  const canvas=document.getElementById("fireworks");
+  const ctx=canvas.getContext("2d");
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+
+  let particles=[];
+
+  function crearExplosion(x,y){
+    for(let i=0;i<40;i++){
+      particles.push({
+        x:x,
+        y:y,
+        dx:(Math.random()-0.5)*5,
+        dy:(Math.random()-0.5)*5,
+        life:100
+      });
+    }
+  }
+
+  function animar(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{
+      ctx.fillStyle="white";
+      ctx.fillRect(p.x,p.y,3,3);
+      p.x+=p.dx;
+      p.y+=p.dy;
+      p.life--;
+    });
+    particles=particles.filter(p=>p.life>0);
+    requestAnimationFrame(animar);
+  }
+
+  setInterval(()=>{
+    crearExplosion(Math.random()*canvas.width,Math.random()*canvas.height);
+  },1000);
+
+  animar();
+}
+</script>
+
+</body>
+</html>
